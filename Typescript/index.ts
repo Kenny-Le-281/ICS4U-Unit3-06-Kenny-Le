@@ -59,6 +59,11 @@ function merge(left: number[], right: number[]): number[] {
 const array: number[] = [3, 6, 8, 10, 1, 2, 1]
 const sortedArray: number[] = mergeSort(array)
 
-console.log(array)
+// Prints orginal array
+console.log(`The original array is: ${array}`)
 
-console.log(sortedArray)
+// Prints sorted array
+console.log(`The sorted array is: ${sortedArray}`)
+
+// Prints done
+console.log('\nDone.')
