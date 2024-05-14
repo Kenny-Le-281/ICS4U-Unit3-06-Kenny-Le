@@ -1,65 +1,64 @@
 /*
-* This program uses the merge sorting algorithm to sort arrays.
+* This program uses a method to find where disks should be placed.
 *
 * @author  Kenny Le
 * @version 1.0
-* @since   2024-05-01
+* @since   2024-05-4
 */
 
-import { createPrompt } from 'bun-promptx'
+function mergeSort(array: number[]): number[] {
+  if (array.length <= 1) {
+      return arr
+  }
 
-// Sorts an array using the merging sorting algorithm.
+  // Split the array into two halves
+  const middle = Math.floor(array.length / 2)
+  const leftHalf = array.slice(0, middle)
+  const rightHalf = array.slice(middle)
 
-function mergeSort(sortArray: number[]): number[] {
-  /**
-   * Merges two arrays together.
-   *
-   * @param left the array to the left
-   * @param right the array to the right
-   * @returns the merged array
-   */
-  function merge(left: number[], right: number[]): number[] {
-    let sortArray: number[] = []
+  // Recursively sort both halves
+  const sortedLeft = mergeSort(leftHalf)
+  const sortedRight = mergeSort(rightHalf)
 
-    while (left.length && right.length) {
-      if (left[0] < right[0]) {
-        sortArray.push(left.shift())
-      } else {
-        sortArray.push(right.shift())
-      }
+  // Merge the sorted halves
+  return merge(sortedLeft, sortedRight)
+}
+
+function merge(left: number[], right: number[]): number[] {
+  let result: number[] = []
+  let leftIndex = 0
+  let rightIndex = 0
+
+  // Merge the two arrays by comparing elements
+  while (leftIndex < left.length && rightIndex < right.length) {
+    if (left[leftIndex] < right[rightIndex]) {
+      result.push(left[leftIndex])
+      leftIndex++
+    } else {
+      result.push(right[rightIndex])
+      rightIndex++
     }
-
-    return [...sortArray, ...left, ...right]
-  }
-  const mid = sortArray.length / 2
-
-  if (sortArray.length < 2) {
-    return sortArray
   }
 
-  const left = sortArray.splice(0, mid)
-  return merge(mergeSort(left), mergeSort(sortArray))
+  // Add any remaining elements from the left array
+  while (leftIndex < left.length) {
+    result.push(left[leftIndex])
+    leftIndex++
+  }
+
+  // Add any remaining elements from the right array
+  while (rightIndex < right.length) {
+    result.push(right[rightIndex])
+    rightIndex++
+  }
+
+  return result
 }
 
-// Create array
-const arrayLength = 10
-let counter = 0
-let array: number[] = []
-while (counter < arrayLength) {
-  const selectedNumber: number = parseInt(createPrompt(`Enter a number to put in index ${counter}: `).value)
-  if (isNaN(selectedNumber)) {
-    console.log("Not a valid number.")
-  } else {
-    array.push(selectedNumber)
-    counter++
-  }
-}
+// Example usage:
+const array: number[] = [3, 6, 8, 10, 1, 2, 1]
+const sortedArray: number[] = mergeSort(array)
 
-// Show unsorted array
-console.log(`Unsorted array: ${array}\n`)
+console.log(array)
 
-// Sort array
-console.log(`Sorted array: ${mergeSort(array)}`)
-
-// Show the program as done
-console.log('\nDone.')
+console.log(sortedArray)
