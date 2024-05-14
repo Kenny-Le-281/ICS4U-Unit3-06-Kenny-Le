@@ -8,7 +8,7 @@
 
 function mergeSort(array: number[]): number[] {
   if (array.length <= 1) {
-      return array
+    return array
   }
 
   // Split the array into two halves
