@@ -9,147 +9,85 @@
 import java.util.Arrays;
 
 /**
-* This program uses merge sorting
-*/
-final class MergeSorting {
-    /**
-    * Prevent instantiation.
-    * Throw an exception IllegalStateException.
-    * if this is ever called
-    *
-    * @throws IllegalStateException if this is ever called
-    *
-    */
-    private MergeSorting() {
-        throw new IllegalStateException("Cannot be instantiated");
-    }
+ * This class implements the Merge Sort algorithm to sort an array of integers.
+ */
+public class MergeSort {
 
     /**
-     * Formats an array of integers.
+     * Sorts the given array using the Merge Sort algorithm.
      *
-     * @param array to be formatted
-     * @return the formatted array as a string
-     */
-    static String formatArray(int[] array) {
-        String formattedArray = "";
-
-        for (int counter = 0; counter < array.length; counter++) {
-            if (counter == array.length - 1) {
-                formattedArray = formattedArray + array[counter];
-            } else {
-                formattedArray = formattedArray + array[counter] + ",";
-            }
-        }
-
-        return formattedArray;
-    }
-
-    /**
-     * Removes the first element of an array.
-     *
-     * @param array the array to have the first element removed
-     * @return the new array
-     */
-    static int[] removeFirst(int[] array) {
-        final int[] newArray = new int[array.length - 1];
-        for (int counter = 1; counter < array.length; counter++) {
-            newArray[counter - 1] = array[counter];
-        }
-
-        return newArray;
-    }
-
-    /**
-     * Pushes an element to an array.
-     *
-     * @param array the array to have the new element
-     * @param newElement the new element of the array
-     * @return the new array
-     */
-    static int[] push(int[] array, int newElement) {
-        final int[] newArray = new int[array.length + 1];
-
-        for (int counter = 0; counter < array.length; counter++) {
-            newArray[counter] = array[counter];
-        }
-
-        newArray[array.length] = newElement;
-
-        return newArray;
-    }
-
-    /**
-     * Merges two arrays together.
-     *
-     * @param left the array to the left
-     * @param right the array to the right
-     * @return the merged array
-     */
-    static int[] merge(int[] left, int[] right) {
-        int[] sortArray = {};
-        int[] otherLeft = left;
-        int[] otherRight = right;
-
-        while (otherLeft.length > 0 && otherRight.length > 0) {
-            if (otherLeft[0] < otherRight[0]) {
-                sortArray = push(sortArray, otherLeft[0]);
-                otherLeft = removeFirst(otherLeft);
-            } else {
-                sortArray = push(sortArray, otherRight[0]);
-                otherRight = removeFirst(otherRight);
-            }
-        }
-
-        for (int counter = 0; counter < otherLeft.length; counter++) {
-            sortArray = push(sortArray, otherLeft[counter]);
-        }
-        for (int counter = 0; counter < otherRight.length; counter++) {
-            sortArray = push(sortArray, otherRight[counter]);
-        }
-
-        return sortArray;
-    }
-
-    /**
-     * Sorts an array using the merging sorting algorithm.
-     *
-     * @param sortArray the array to be sorted
+     * @param array the array to be sorted
      * @return the sorted array
      */
-    static int[] mergeSort(int[] sortArray) {
-        final int mid = sortArray.length / 2;
-        final int[] sortedArray;
-
-        if (sortArray.length < 2) {
-            sortedArray = sortArray;
-        } else {
-            final int[] left = Arrays.copyOfRange(sortArray, 0, mid);
-            final int[] right = Arrays.copyOfRange(
-                sortArray, mid, sortArray.length
-            );
-            sortedArray = merge(mergeSort(left), mergeSort(right));
+    public static int[] mergeSort(int[] array) {
+        if (array.length <= 1) {
+            return array;
         }
 
-        return sortedArray;
+        // Split the array into two halves
+        // The Arrays.copyOfRange() function in Java creates a new array 
+        // containing a specified range of elements from an original array
+        int middle = array.length / 2;
+        int[] leftHalf = Arrays.copyOfRange(array, 0, middle);
+        int[] rightHalf = Arrays.copyOfRange(array, middle, array.length);
+
+        // Recursively sort both halves
+        int[] sortedLeft = mergeSort(leftHalf);
+        int[] sortedRight = mergeSort(rightHalf);
+
+        // Merge the sorted halves
+        return merge(sortedLeft, sortedRight);
     }
 
     /**
-    * The starting main() function.
-    *
-    * @param args No args will be used
-    */
-    public static void main(final String[] args) {
-        // Array constants
-        final int[] array = {-1, 4, 10, 5, 18, 225, 900, -80, -6, -9};
-        final int[] sortedArray = mergeSort(array);
+     * Merges two sorted arrays into a single sorted array.
+     *
+     * @param left  the left sorted array
+     * @param right the right sorted array
+     * @return the merged sorted array
+     */
+    public static int[] merge(int[] left, int[] right) {
+        int[] result = new int[left.length + right.length];
+        int leftIndex = 0, rightIndex = 0, resultIndex = 0;
 
-        // Show unsorted array
-        System.out.println("Unsorted array: " + formatArray(array) + "\n");
+        // Merge the two arrays by comparing elements
+        while (leftIndex < left.length && rightIndex < right.length) {
+            if (left[leftIndex] < right[rightIndex]) {
+                result[resultIndex++] = left[leftIndex++];
+            } else {
+                result[resultIndex++] = right[rightIndex++];
+            }
+        }
 
-        // Show sorted array
-        System.out.println("Sorted array: " + formatArray(sortedArray));
+        // Add any remaining elements from the left array
+        while (leftIndex < left.length) {
+            result[resultIndex++] = left[leftIndex++];
+        }
 
-        // Show the program as done
+        // Add any remaining elements from the right array
+        while (rightIndex < right.length) {
+            result[resultIndex++] = right[rightIndex++];
+        }
+
+        return result;
+    }
+
+    /**
+     * Main method to demonstrate the usage of MergeSort class.
+     *
+     * @param args command line arguments (not used)
+     */
+    public static void main(String[] args) {
+        int[] array = {3, 4, 8, 10, 9, 7, 1};
+        int[] sortedArray = mergeSort(array);
+
+        // Prints original array
+        System.out.println("The original array is: " + Arrays.toString(array));
+
+        // Prints sorted array
+        System.out.println("The sorted array is: " + Arrays.toString(sortedArray));
+
+        // Prints done
         System.out.println("\nDone.");
     }
 }
