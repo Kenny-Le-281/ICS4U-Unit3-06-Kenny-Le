@@ -56,7 +56,7 @@ function merge(left: number[], right: number[]): number[] {
 }
 
 // Example usage:
-const array: number[] = [3, 6, 8, 10, 1, 2, 1]
+const array: number[] = [3, 4, 8, 10, 9, 7, 1]
 const sortedArray: number[] = mergeSort(array)
 
 // Prints orginal array
